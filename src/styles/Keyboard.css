@@ -1,0 +1,31 @@
+.keyboard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  
+  .key {
+    padding: 15px 20px;
+    margin: 5px;
+    border: 2px solid #444;
+    border-radius: 8px;
+    background-color: #4CAF50;  /* Key background color */
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    font-family: "Courier New", Courier, monospace;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  }
+  
+  .key:hover {
+    background-color: #45a049;  /* Hover effect */
+  }
+  
+  .key:active {
+    background-color: #388e3c;  /* Active state effect */
+    transform: scale(0.98);  /* Slight shrink when pressed */
+  }

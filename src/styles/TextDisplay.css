@@ -1,0 +1,37 @@
+.text-display {
+    margin: 20px auto;
+    padding: 10px;
+    border: 2px solid #000;
+    border-radius: 5px;
+    width: 80%;
+    min-height: 50px;
+    font-size: 18px;
+    background-color: #fff;
+    color: #000;
+    text-align: left;
+    position: relative; /* Required to position the cursor */
+    white-space: pre-wrap; /* Allow newlines to be handled correctly */
+    line-height: 1.5; /* Set a consistent line height */
+  }
+  
+  .cursor {
+    position: absolute;
+    top: 15px; /* Adjust as needed for better vertical alignment */
+    width: 1px;
+    height: 1em; /* Match the line height to align vertically */
+    background-color: #000;
+    animation: blink 0.9s step-end infinite;
+  }
+  
+  @keyframes blink {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
