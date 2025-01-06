@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/Keyboard.css"; // Ensure path is correct
+import "../styles/Keyboard.css"; // Ensure correct path
 
 const Keyboard = ({ onKeyPress }) => {
   const keys = [
@@ -16,15 +16,7 @@ const Keyboard = ({ onKeyPress }) => {
         <button
           key={key}
           className="key"
-          onClick={() => {
-            if (key === "Backspace") {
-              onKeyPress("backspace"); // Special backspace handling
-            } else if (key === "Enter") {
-              onKeyPress("Enter"); // Handle enter (new line)
-            } else {
-              onKeyPress(key); // Regular key press
-            }
-          }}
+          onClick={() => onKeyPress(key)}
         >
           {key === "Backspace" ? "⌫" : key === "Enter" ? "⏎" : key}
         </button>

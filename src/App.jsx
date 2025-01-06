@@ -1,59 +1,61 @@
-import React, { useState, useEffect, useRef } from "react";
-import Keyboard from "./components/Keyboard";
+import React, { useRef, useState, useEffect } from "react";
 import TextDisplay from "./components/TextDisplay";
+import Keyboard from "./components/Keyboard";
+import logo from './assets/logo.svg';  // Import the SVG image
 
 const App = () => {
   const [text, setText] = useState("");
-  const [isTyping, setIsTyping] = useState(false);  // Track whether typing with keyboard or clicking
-  const textRef = useRef(null);  // Reference for text container
+  const textRef = useRef(null);
 
-  // Handle physical keyboard input
+  // Automatically focus on the contentEditable when the component mounts
   useEffect(() => {
-    const handleKeyPress = (e) => {
-      if (isTyping) {
-        if (/^[a-zA-Z0-9]$/.test(e.key)) {
-          setText((prev) => prev + e.key);  // Add typed character to the text
-        } else if (e.key === "Backspace") {
-          const selectedText = window.getSelection().toString();
-          if (selectedText) {
-            setText("");  // If text is selected, clear all
-          } else {
-            setText((prev) => prev.slice(0, -1));  // Handle backspace normally
-          }
-        } else if (e.key === "Enter") {
-          setText((prev) => prev + "\n");  // Handle Enter key
-        }
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyPress);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyPress);
-    };
-  }, [isTyping]);
-
-  // Update typing mode when user interacts with virtual keyboard
-  const handleKeyClick = (key) => {
-    if (key === "backspace") {
-      const selectedText = window.getSelection().toString();
-      if (selectedText) {
-        setText("");  // Clear all text if anything is selected
-      } else {
-        setText((prev) => prev.slice(0, -1));  // Remove the last character
-      }
-    } else if (key === "Enter") {
-      setText((prev) => prev + "\n");  // Add new line on Enter
-    } else {
-      setText((prev) => prev + key);  // Add regular key
+    if (textRef.current) {
+      textRef.current.focus();
     }
-    setIsTyping(true); // Switch to typing mode after a click
+  }, []);
+
+  const setCursorPositionToEnd = () => {
+    const selection = window.getSelection();
+    const range = document.createRange();
+
+    if (textRef.current.firstChild) {
+      range.selectNodeContents(textRef.current);
+      range.collapse(false); // Place the cursor at the end
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+  };
+
+  const handleVirtualKeyPress = (key) => {
+    if (key === "Backspace") {
+      setText((prev) => prev.slice(0, -1)); // Handle Backspace
+    } else if (key === "Enter") {
+      setText((prev) => {
+        // Prevent adding a second newline if there's already one at the end
+        if (prev.endsWith("\n")) {
+          return prev; // Don't append another newline
+        }
+        return prev + "\n"; // Add newline
+      });
+    } else {
+      setText((prev) => prev + key); // Regular character input
+    }
+  
+    // Re-focus and set cursor position after state updates
+    setTimeout(() => {
+      if (textRef.current) {
+        textRef.current.focus(); // Ensure caret blinks
+        setCursorPositionToEnd(); // Keep cursor at the end
+      }
+    }, 0);
   };
 
   return (
     <div className="app">
-      <TextDisplay text={text} />
-      <Keyboard onKeyPress={handleKeyClick} />
+      <img src={logo} alt="Logo" style={{ width: '150px', height: 'auto', position: 'absolute', top: '20px', left: '20px' }} />
+      {/* Display the logo */}
+      <TextDisplay text={text} setText={setText} textRef={textRef} />
+      <Keyboard onKeyPress={handleVirtualKeyPress} />
     </div>
   );
 };
