@@ -49,7 +49,6 @@
     transform: scale(0.98); /* Slight shrink when pressed */
   }
   
-  /* Mobile Responsiveness */
   @media (max-width: 992px) {
     .keyboard {
       padding: 15px;
@@ -61,11 +60,43 @@
     }
   }
   
+  @media (max-width: 870px) {
+    .flex-container {
+        display: flex;
+        flex-direction: column; 
+        margin-top: 100px;
+    }
+
+    .text-display {
+        width: 20rem;
+    }
+    .text-display-container {
+        display: flex;
+        justify-content: center;
+        width: 20rem;
+    }
+
+    .keyboard {
+      padding: 10px; /* Adjust padding as needed */
+      gap: 0px;
+    }
+    
+    .key {
+      font-size: 8px; /* Adjust font size as needed */
+    }
+  }
+
+  
+  
   /* Very Small Screens */
   @media (max-width: 576px) {
     .keyboard {
       grid-template-columns: repeat(5, 1fr); /* Even fewer keys per row */
       padding: 5px;
+    }
+
+    .text-display {
+        width: 10rem;
     }
   
     .key {

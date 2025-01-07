@@ -120,7 +120,7 @@ const App = () => {
         minHeight: "100vh",
       }}
     >
-      <div
+      <div className="flex-container"
         style={{
           display: "flex",
           flex: 1,
