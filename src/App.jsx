@@ -3,7 +3,7 @@ import TextDisplay from "./components/TextDisplay";
 import Keyboard from "./components/Keyboard";
 import TextBoxList from "./components/TextBoxList";
 import Footer from "./components/Footer"; 
-import logo from "./assets/logo.png";
+import logo from "/logo.png";
 
 const App = () => {
   const [text, setText] = useState(""); // Current text input
