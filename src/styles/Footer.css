@@ -1,0 +1,109 @@
+/* Footer container */
+.footer {
+    background-color: #1c1c1c; /* Dark background for the footer */
+    color: #ecf0f1;
+    padding: 20px 0;
+    width: 100%;
+    position: relative;
+    bottom: 0px;
+  }
+  
+  /* Footer content layout */
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #ecf0f1;
+    padding: 1em;
+    gap: 50px;
+  }
+  
+  /* Left section of the footer */
+  .footer-left {
+    font-size: 14px;
+    font-weight: bold;
+    color: #66d9ef;
+    text-shadow: 0 0 5px rgba(102, 217, 239, 0.8),
+      0 0 15px rgba(102, 217, 239, 0.6), 0 0 20px rgba(102, 217, 239, 0.4);
+    background: linear-gradient(90deg, #66d9ef, #a1ffce);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: transform 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
+    text-align: center;
+  }
+  
+  /* Hover effect for footer text */
+  .footer-left:hover {
+    transform: scale(1.1); /* Slight zoom effect */
+    text-shadow: 0 0 10px rgba(102, 217, 239, 1),
+      0 0 20px rgba(161, 255, 206, 0.8), 0 0 30px rgba(161, 255, 206, 0.6);
+    cursor: pointer;
+    animation: glowHover 1.5s ease-in-out infinite alternate;
+  }
+  
+  /* Adjust .footer-left for screens below 360px */
+  @media (max-width: 390px) {
+    .footer-left {
+      font-size: 12px; /* Reduce font size */
+      line-height: 1;
+    }
+  }
+  
+  /* Keyframes for subtle pulsing glow */
+  @keyframes glowHover {
+    0% {
+      text-shadow: 0 0 5px rgba(102, 217, 239, 0.8),
+        0 0 15px rgba(102, 217, 239, 0.6);
+    }
+    50% {
+      text-shadow: 0 0 15px rgba(161, 255, 206, 0.8),
+        0 0 25px rgba(161, 255, 206, 0.6);
+    }
+    100% {
+      text-shadow: 0 0 5px rgba(102, 217, 239, 0.8),
+        0 0 15px rgba(102, 217, 239, 0.6);
+    }
+  }
+  
+  /* Right section of the footer */
+  .footer-right {
+    margin-right: 5px;
+  }
+  
+  .footer-right ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+  
+  .footer-right li {
+    margin-right: 20px;
+  }
+  
+  .footer-right a svg {
+    font-size: 24px;
+    margin-right: 10px;
+    color: #66d9ef;
+    transition: transform 0.2s ease;
+  }
+  
+  .footer-right a:hover svg {
+    transform: scale(1.2);
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(102, 217, 239, 0.5);
+  }
+  
+  /* Adjustments for larger screens */
+  @media (min-width: 768px) {
+    .footer-content {
+      flex-direction: row;
+    }
+    .footer-left {
+      text-align: left;
+    }
+    .footer-right {
+      margin-top: 0;
+    }
+  }
+  

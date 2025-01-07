@@ -10,7 +10,7 @@
     font-weight: bold;
     line-height: 1.5;
     white-space: pre-wrap;
-    background: radial-gradient(circle, #721a0438, #feb47b); /* Radial gradient with warm colors */
+    background: radial-gradient(circle, #721a0438, #feb47b); 
     color: #333;
     border: 2px solid #444;
     border-radius: 10px;

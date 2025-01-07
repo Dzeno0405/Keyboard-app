@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/Keyboard.css"; // Ensure correct path
+import "../styles/Keyboard.css"; 
 
 const Keyboard = ({ onKeyPress }) => {
   const keys = [
@@ -24,5 +24,7 @@ const Keyboard = ({ onKeyPress }) => {
     </div>
   );
 };
+
+
 
 export default Keyboard;
