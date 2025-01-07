@@ -36,6 +36,12 @@ const App = () => {
     };
   }, []);
 
+  // Prevent the default keyboard from opening on focus
+  const handleFocus = (event) => {
+    event.preventDefault();
+    textRef.current.blur(); // Ensure the mobile keyboard is not triggered
+  };
+
   const handleVirtualKeyPress = (key) => {
     processKeyPress(key);
   };
@@ -142,6 +148,7 @@ const App = () => {
             text={text}
             setText={setText}
             textRef={textRef}
+            onFocus={handleFocus} // Prevent mobile keyboard
           />
           {keyboardVisible && <Keyboard onKeyPress={handleVirtualKeyPress} />}
         </div>

@@ -11,7 +11,7 @@
   /* Footer content layout */
   .footer-content {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     color: #ecf0f1;
     padding: 1em;
