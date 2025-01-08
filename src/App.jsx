@@ -151,6 +151,11 @@ const App = () => {
             onFocus={handleFocus} // Prevent mobile keyboard
           />
           {keyboardVisible && <Keyboard onKeyPress={handleVirtualKeyPress} />}
+          <input
+            type="text"
+            style={{ position: "absolute", top: "-9999px", opacity: 0 }}
+            readOnly={true}
+          />
         </div>
       </div>
       {isPortrait && (
