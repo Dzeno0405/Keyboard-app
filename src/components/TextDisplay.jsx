@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import "../styles/TextDisplay.css";
 
-const TextDisplay = ({ text, setText }) => {
+const TextDisplay = ({ text, setText, onFocus }) => {  // Accept the onFocus prop
   const textRef = useRef(null);
 
   // Focus the contentEditable div when component mounts or text changes
@@ -45,6 +45,7 @@ const TextDisplay = ({ text, setText }) => {
         ref={textRef}
         suppressContentEditableWarning={true}
         onInput={handleInput} // Update text state when user types
+        onFocus={onFocus} // Add the onFocus handler here
       ></div>
     </div>
   );

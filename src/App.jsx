@@ -147,7 +147,6 @@ const App = () => {
           <TextDisplay
             text={text}
             setText={setText}
-            textRef={textRef}
             onFocus={handleFocus} // Prevent mobile keyboard
           />
           {keyboardVisible && <Keyboard onKeyPress={handleVirtualKeyPress} />}
