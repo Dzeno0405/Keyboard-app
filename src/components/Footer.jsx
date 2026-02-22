@@ -1,39 +1,41 @@
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebook, faInstagram, faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import '../styles/Footer.css'; // Import the CSS file
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faFacebook,
+  faInstagram,
+  faGithub,
+  faLinkedin,
+} from "@fortawesome/free-brands-svg-icons";
+import "../styles/Footer.css";
+
+const SOCIAL_LINKS = [
+  { icon: faGithub,   href: "https://github.com/dzeno0405",                           label: "GitHub" },
+  { icon: faLinkedin, href: "https://www.linkedin.com/in/dzenan-polutak-28098b168/", label: "LinkedIn" },
+  { icon: faInstagram,href: "https://www.instagram.com/dzeno0405/",                  label: "Instagram" },
+  { icon: faFacebook, href: "https://www.facebook.com/dpolutak/",                    label: "Facebook" },
+];
 
 function Footer() {
   return (
     <footer className="footer">
       <div className="footer-content">
-        <div className="footer-left">
-          &copy; Dzenan Polutak 2025 All rights reserved
-        </div>
-        <div className="footer-right">
-          <ul>
-            <li>
-              <a href="https://www.facebook.com/dpolutak/" target="_blank" rel="noopener noreferrer">
-                <FontAwesomeIcon icon={faFacebook} />
+        <span className="footer-copy">
+          &copy; {new Date().getFullYear()} Dzenan Polutak
+        </span>
+        <ul className="footer-links" aria-label="Social links">
+          {SOCIAL_LINKS.map(({ icon, href, label }) => (
+            <li key={label}>
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="footer-link"
+              >
+                <FontAwesomeIcon icon={icon} />
               </a>
             </li>
-            <li>
-              <a href="https://www.instagram.com/dzeno0405/" target="_blank" rel="noopener noreferrer">
-                <FontAwesomeIcon icon={faInstagram} />
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/dzeno0405" target="_blank" rel="noopener noreferrer">
-                <FontAwesomeIcon icon={faGithub} />
-              </a>
-            </li>
-            <li>
-              <a href="https://www.linkedin.com/in/dzenan-polutak-28098b168/" target="_blank" rel="noopener noreferrer">
-                <FontAwesomeIcon icon={faLinkedin} />
-              </a>
-            </li>
-          </ul>
-        </div>
+          ))}
+        </ul>
       </div>
     </footer>
   );

@@ -1,107 +1,180 @@
-/* Keyboard Component Styles */
+/* ─── Keyboard Container ─────────────────────────────────────── */
 .keyboard {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr); /* 10 keys per row */
-    gap: 10px;
-    max-width: 100%; /* Ensure full width */
-    margin: 20px auto;
-    padding: 20px;
-    border: 2px solid #444;
-    border-radius: 10px;
-    background: radial-gradient(circle, #1b2735, #090a0f);
-    overflow-x: auto; /* Allow horizontal scrolling if necessary */
-  }
-  
-  /* Keyboard Key Styles */
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  user-select: none;
+  width: 100%;
+}
+
+/* ─── Row ────────────────────────────────────────────────────── */
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+/* ─── Base Key ───────────────────────────────────────────────── */
+.key {
+  /* Size */
+  height: 44px;
+  min-width: 44px;
+  flex: 1;
+  max-width: 58px;
+  padding: 0 6px;
+
+  /* Appearance */
+  background: var(--bg-key);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-bottom: 3px solid rgba(0, 0, 0, 0.55);
+  border-radius: var(--radius-sm);
+
+  /* Typography */
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+
+  /* Interaction */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Transitions */
+  transition: background 0.08s ease, color 0.08s ease, border-color 0.08s ease;
+}
+
+/* ─── Hover ──────────────────────────────────────────────────── */
+.key:hover {
+  background: var(--bg-key-hover);
+  color: var(--accent-hover);
+  border-color: var(--border-accent);
+}
+
+/* ─── Pressed / Active ───────────────────────────────────────── */
+.key:active,
+.key--active {
+  transform: translateY(2px);
+  border-bottom-width: 1px;
+  background: var(--bg-key-hover);
+  color: var(--accent);
+  border-color: var(--border-accent);
+}
+
+/* ─── Wide Keys (Backspace / Enter) ─────────────────────────── */
+.key--wide {
+  min-width: 76px;
+  max-width: 100px;
+  flex: 1.6;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0;
+}
+
+/* ─── Backspace (danger) ─────────────────────────────────────── */
+.key--danger {
+  background: var(--red-bg);
+  border-color: var(--red-border);
+  color: var(--red);
+}
+
+.key--danger:hover {
+  background: rgba(248, 81, 73, 0.2);
+  color: #ff7b74;
+  border-color: var(--red);
+}
+
+.key--danger:active,
+.key--danger.key--active {
+  background: rgba(248, 81, 73, 0.25);
+  color: #ff7b74;
+  border-color: var(--red);
+}
+
+/* ─── Enter (success) ────────────────────────────────────────── */
+.key--success {
+  background: var(--green-bg);
+  border-color: var(--green-border);
+  color: var(--green);
+}
+
+.key--success:hover {
+  background: rgba(63, 185, 80, 0.2);
+  color: #56d364;
+  border-color: var(--green);
+}
+
+.key--success:active,
+.key--success.key--active {
+  background: rgba(63, 185, 80, 0.25);
+  color: #56d364;
+  border-color: var(--green);
+}
+
+/* ─── Space Bar ──────────────────────────────────────────────── */
+.key--space {
+  min-width: 180px;
+  max-width: 420px;
+  flex: 6;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+}
+
+.key--space:hover {
+  color: var(--accent-hover);
+}
+
+.key--space:active,
+.key--space.key--active {
+  color: var(--accent);
+}
+
+/* ─── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 860px) {
   .key {
-    padding: 10px 20px;
-    margin: 5px;
-    border: 2px solid #444;
-    border-radius: 8px;
-    background: radial-gradient(circle, #1b2735, #090a0f);
-    color: white;
-    cursor: pointer;
-    font-size: 15px;
-    font-family: "Roboto Mono", monospace;
-    font-weight: bold;
-    text-transform: uppercase;
-    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
-    animation: rgbEffect 5s linear infinite;
-  }
-  
-  /* RGB Animation Effect for the keys */
-  @keyframes rgbEffect {
-    0% { color: red; }
-    25% { color: yellow; }
-    50% { color: green; }
-    75% { color: cyan; }
-    100% { color: blue; }
-  }
-  
-  /* Hover effect */
-  .key:hover {
-    background-color: #45a049;
-  }
-  
-  /* Active key effect */
-  .key:active {
-    background-color: #388e3c;
-    transform: scale(0.98); /* Slight shrink when pressed */
-  }
-  
-  @media (max-width: 992px) {
-    .keyboard {
-      padding: 15px;
-      gap: 0px;
-    }
-  
-    .key {
-      font-size: 12px;
-    }
-  }
-  
-  @media (max-width: 870px) {
-    .flex-container {
-        display: flex;
-        flex-direction: column; 
-        margin-top: 100px;
-    }
-
-    .text-display {
-        width: 20rem;
-    }
-    .text-display-container {
-        display: flex;
-        justify-content: center;
-        width: 20rem;
-    }
-
-    .keyboard {
-      padding: 10px; /* Adjust padding as needed */
-      gap: 0px;
-    }
-    
-    .key {
-      font-size: 8px; /* Adjust font size as needed */
-    }
+    height: 40px;
+    min-width: 38px;
+    font-size: 12px;
   }
 
-  
-  
-  /* Very Small Screens */
-  @media (max-width: 576px) {
-    .keyboard {
-      grid-template-columns: repeat(5, 1fr); /* Even fewer keys per row */
-      padding: 5px;
-    }
-
-    .text-display {
-        width: 10rem;
-    }
-  
-    .key {
-      font-size: 9px;
-      padding: 4px 8px;
-    }
+  .key--wide {
+    min-width: 64px;
   }
-  
+}
+
+@media (max-width: 640px) {
+  .keyboard {
+    padding: 10px 12px;
+    gap: 4px;
+  }
+
+  .keyboard-row {
+    gap: 3px;
+  }
+
+  .key {
+    height: 36px;
+    min-width: 28px;
+    font-size: 10px;
+    padding: 0 3px;
+  }
+
+  .key--wide {
+    min-width: 52px;
+    font-size: 9px;
+  }
+
+  .key--space {
+    min-width: 100px;
+    font-size: 8px;
+  }
+}

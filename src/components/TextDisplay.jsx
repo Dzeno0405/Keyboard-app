@@ -1,54 +1,26 @@
-import React, { useRef, useEffect } from "react";
 import "../styles/TextDisplay.css";
 
-const TextDisplay = ({ text, setText, onFocus }) => {  // Accept the onFocus prop
-  const textRef = useRef(null);
+// Pure display component — no contentEditable complexity.
+// All input is routed through App's handleKeyPress; this just renders state.
+const TextDisplay = ({ text }) => (
+  <div className="text-display-wrapper">
+    <label className="text-display-label">Current input</label>
 
-  // Focus the contentEditable div when component mounts or text changes
-  useEffect(() => {
-    if (textRef.current) {
-      textRef.current.focus();
-    }
-  }, [text]);
-
-  // Synchronize text state with contentEditable div
-  useEffect(() => {
-    if (textRef.current.innerText !== text) {
-      textRef.current.innerText = text;
-      // Keep cursor at the end after text update
-      setCursorPositionToEnd();
-    }
-  }, [text]);
-
-  const setCursorPositionToEnd = () => {
-    const range = document.createRange();
-    const selection = window.getSelection();
-
-    // Move the cursor to the end of the text content
-    range.selectNodeContents(textRef.current);
-    range.collapse(false); // Collapse to the end of the content
-
-    selection.removeAllRanges();
-    selection.addRange(range);
-  };
-
-  // Handle user input in contentEditable div
-  const handleInput = () => {
-    setText(textRef.current.innerText);
-  };
-
-  return (
-    <div className="text-display-container">
-      <div
-        className="text-display"
-        contentEditable
-        ref={textRef}
-        suppressContentEditableWarning={true}
-        onInput={handleInput} // Update text state when user types
-        onFocus={onFocus} // Add the onFocus handler here
-      ></div>
+    <div className={`text-display${text ? " text-display--has-text" : ""}`}>
+      {text ? (
+        <>
+          <span className="text-content">{text}</span>
+          <span className="cursor" aria-hidden="true" />
+        </>
+      ) : (
+        <span className="text-placeholder">Start typing…</span>
+      )}
     </div>
-  );
-};
+
+    <div className="text-display-hint">
+      Press <kbd>Enter</kbd> to add to the list &nbsp;·&nbsp; <kbd>⌫</kbd> to delete
+    </div>
+  </div>
+);
 
 export default TextDisplay;

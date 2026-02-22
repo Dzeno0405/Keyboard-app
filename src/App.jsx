@@ -1,182 +1,117 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import TextDisplay from "./components/TextDisplay";
 import Keyboard from "./components/Keyboard";
 import TextBoxList from "./components/TextBoxList";
-import Footer from "./components/Footer"; 
+import Footer from "./components/Footer";
+import "./styles/App.css";
 import logo from "/logo.png";
 
 const App = () => {
-  const [text, setText] = useState(""); // Current text input
-  const [textBoxes, setTextBoxes] = useState([]); // List of text boxes
-  const [keyboardVisible, setKeyboardVisible] = useState(false); // Track keyboard visibility
-  const [isPortrait, setIsPortrait] = useState(true); // Track screen orientation
-  const textRef = useRef(null); // Reference to the content-editable div
-  const cursorRef = useRef(0); // Track cursor position
+  const [text, setText] = useState("");
+  const [textBoxes, setTextBoxes] = useState([]);
+  const [isMobilePortrait, setIsMobilePortrait] = useState(false);
+  // activeKey lets the Keyboard component light up the key that was just pressed
+  const [activeKey, setActiveKey] = useState(null);
 
+  // ── Orientation / device detection ──────────────────────────────
   useEffect(() => {
-    if (textRef.current) {
-      textRef.current.focus(); // Auto-focus on text area
-    }
-
-    const handleOrientationChange = () => {
-      if (window.innerHeight < window.innerWidth) {
-        setIsPortrait(false);
-        setKeyboardVisible(true);
-      } else {
-        setIsPortrait(true);
-        setKeyboardVisible(false);
-      }
+    const check = () => {
+      const isTouchDevice =
+        "ontouchstart" in window || navigator.maxTouchPoints > 0;
+      const isPortrait = window.innerHeight > window.innerWidth;
+      const isSmallScreen = window.innerWidth < 1024;
+      setIsMobilePortrait(isTouchDevice && isSmallScreen && isPortrait);
     };
-
-    handleOrientationChange(); // Initial check
-    window.addEventListener("resize", handleOrientationChange);
-
-    return () => {
-      window.removeEventListener("resize", handleOrientationChange);
-    };
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
   }, []);
 
-  // Prevent the default keyboard from opening on focus
-  const handleFocus = (event) => {
-    event.preventDefault();
-    textRef.current.blur(); // Ensure the mobile keyboard is not triggered
-  };
-
-  const handleVirtualKeyPress = (key) => {
-    processKeyPress(key);
-  };
-
-  const handlePhysicalKeyPress = (event) => {
-    const { key, metaKey, ctrlKey, altKey } = event;
-
-    if (metaKey || ctrlKey || altKey) {
-      return; // Ignore modifier keys
-    }
-
-    if (key === "Enter" || key === "Backspace" || key === "Delete" || /^[a-zA-Z0-9\s]$/.test(key)) {
-      event.preventDefault();
-      processKeyPress(key);
-    }
-  };
-
-  // Process key press (used for both physical and virtual keyboard)
-  const processKeyPress = (key) => {
-    const currentCursor = cursorRef.current; // Get current cursor position
-    const selection = window.getSelection(); // Get selection (highlighted text)
-    const selectedText = selection ? selection.toString() : ''; // Get selected text
-
-    if (key === "Backspace" || key === "Delete") {
-      if (selectedText.length > 0) {
-        // If there's selected text, delete it
-        setText((prevText) => prevText.replace(selectedText, ''));
-      } else {
-        // Remove the character at the current cursor position
-        if (key === "Backspace" && currentCursor > 0) {
-          setText((prevText) => {
-            const updatedText = prevText.slice(0, currentCursor - 1) + prevText.slice(currentCursor);
-            cursorRef.current = currentCursor - 1; // Update cursor position after deletion
-            return updatedText;
-          });
-        }
+  // ── Core key-press handler (virtual + physical) ──────────────────
+  const handleKeyPress = useCallback((key) => {
+    if (key === "Enter") {
+      const trimmed = text.trim();
+      if (trimmed) {
+        setTextBoxes((boxes) => [...boxes, trimmed]);
+        setText("");
       }
-    } else if (key === "Enter") {
-      if (text.trim()) {
-        setTextBoxes((prev) => [...prev, text.trim()]);
-        setText(""); // Clear text on enter
-      }
+    } else if (key === "Backspace") {
+      setText((prev) => prev.slice(0, -1));
     } else {
-      // Insert character at the current cursor position
-      setText((prevText) => {
-        const updatedText = prevText.slice(0, currentCursor) + key + prevText.slice(currentCursor);
-        cursorRef.current = currentCursor + 1; // Update cursor position after the insertion
-        return updatedText;
-      });
+      setText((prev) => prev + key);
     }
-  };
 
-  // Handle click to insert text at cursor position
-  const handleTextClick = (event) => {
-    const selection = window.getSelection();
-    const cursorPosition = selection ? selection.anchorOffset : text.length; // Get clicked position (anchorOffset)
-
-    cursorRef.current = cursorPosition; // Track the cursor position
-    
-    textRef.current.focus(); // Ensure the field remains focused
-  };
-
-  useEffect(() => {
-    document.addEventListener("keydown", handlePhysicalKeyPress);
-    return () => {
-      document.removeEventListener("keydown", handlePhysicalKeyPress);
-    };
+    // Flash the matching key on the virtual keyboard
+    setActiveKey(key);
+    setTimeout(() => setActiveKey(null), 140);
   }, [text]);
 
+  // ── Physical keyboard listener ───────────────────────────────────
+  // Stable because handleKeyPress is memoised with useCallback
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleKeyPress("Enter");
+      } else if (e.key === "Backspace") {
+        e.preventDefault();
+        handleKeyPress("Backspace");
+      } else if (e.key === " ") {
+        e.preventDefault();
+        handleKeyPress(" ");
+      } else if (e.key.length === 1) {
+        // Any printable character — uppercase so it matches the virtual keys
+        handleKeyPress(e.key.toUpperCase());
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyPress]);
+
+  // ── Actions ──────────────────────────────────────────────────────
+  const handleClear = useCallback(() => setTextBoxes([]), []);
+
+  // ── Render ───────────────────────────────────────────────────────
   return (
-    <div
-      className="app"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh",
-      }}
-    >
-      <div className="flex-container"
-        style={{
-          display: "flex",
-          flex: 1,
-          alignItems: "center",
-          gap: "20px",
-        }}
-      >
-        <img
-          src={logo}
-          alt="Logo"
-          style={{
-            width: "150px",
-            height: "auto",
-            position: "absolute",
-            top: "20px",
-            left: "20px",
-          }}
-        />
-        <TextBoxList textBoxes={textBoxes} />
-        <div
-          style={{ flex: 1 }}
-          onClick={handleTextClick} // Handle click event
-        >
-          <TextDisplay
-            text={text}
-            setText={setText}
-            onFocus={handleFocus} // Prevent mobile keyboard
-          />
-          {keyboardVisible && <Keyboard onKeyPress={handleVirtualKeyPress} />}
-          <input
-            type="text"
-            style={{ position: "absolute", top: "-9999px", opacity: 0 }}
-            readOnly={true}
-          />
+    <div className="app">
+      {/* Header */}
+      <header className="app-header">
+        <img src={logo} alt="KeyMate logo" className="header-logo" />
+        <div>
+          <p className="header-title">Dzenan's KeyMate</p>
+          <p className="header-subtitle">Click or type — press Enter to save</p>
         </div>
-      </div>
-      {isPortrait && (
-        <div
-          style={{
-            backgroundColor: "#1b2735",
-            color: "#ffffff",
-            fontSize: "18px",
-            marginTop: "20px",
-            padding: "15px 20px",
-            borderRadius: "10px",
-            textAlign: "center",
-            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.3)",
-            fontWeight: "bold",
-            maxWidth: "90%",
-            margin: "20px auto",
-            lineHeight: "1.5",
-          }}
-        >
-          <p>Please rotate your phone to use the keyboard</p>
-        </div>
-      )}
+      </header>
+
+      {/* Main */}
+      <main className="app-main">
+        {isMobilePortrait ? (
+          <div className="rotate-prompt">
+            <div className="rotate-icon">↻</div>
+            <p className="rotate-text">Rotate your device</p>
+            <p className="rotate-hint">
+              This app works best in landscape orientation
+            </p>
+          </div>
+        ) : (
+          <div className="app-layout">
+            {/* Left — message history */}
+            <aside className="history-panel">
+              <TextBoxList textBoxes={textBoxes} onClear={handleClear} />
+            </aside>
+
+            {/* Right — text display + keyboard */}
+            <section className="input-panel">
+              <TextDisplay text={text} />
+              <Keyboard onKeyPress={handleKeyPress} activeKey={activeKey} />
+            </section>
+          </div>
+        )}
+      </main>
+
       <Footer />
     </div>
   );

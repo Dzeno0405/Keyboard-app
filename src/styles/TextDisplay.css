@@ -1,32 +1,110 @@
-.text-display-container {
-    width: 100%;
-    margin: 20px auto;
-  }
-  
-  .text-display {
-    min-height: 50px;
-    padding: 12px;
-    font-size: 18px;
-    font-weight: bold;
-    line-height: 1.5;
-    white-space: pre-wrap;
-    background: radial-gradient(circle, #721a0438, #feb47b); 
-    color: #333;
-    border: 2px solid #444;
-    border-radius: 10px;
-    outline: none;
-    user-select: text;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-  }
-  
-  .text-display:hover {
-    background-color: #e0e0e0;
-    border-color: #bbb;
-  }
-  
-  .text-display::placeholder {
-    color: #aaa;
-    font-style: italic;
-  }
-  
+/* ─── Wrapper ────────────────────────────────────────────────── */
+.text-display-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ─── Label ──────────────────────────────────────────────────── */
+.text-display-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--text-muted);
+}
+
+/* ─── Display Box ────────────────────────────────────────────── */
+.text-display {
+  min-height: 60px;
+  padding: 14px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-muted);
+  border-radius: var(--radius-md);
+
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.55;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  word-break: break-all;
+
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Active state when text is present */
+.text-display--has-text {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+/* ─── Text Content ────────────────────────────────────────────── */
+.text-content {
+  white-space: pre-wrap;
+  color: var(--text-primary);
+}
+
+/* ─── Blinking Cursor ─────────────────────────────────────────── */
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.15em;
+  background: var(--accent);
+  margin-left: 2px;
+  vertical-align: middle;
+  border-radius: 1px;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ─── Placeholder ─────────────────────────────────────────────── */
+.text-placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Cursor always visible even when placeholder shown */
+.text-placeholder::after {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 1.15em;
+  background: var(--text-muted);
+  margin-left: 2px;
+  vertical-align: middle;
+  border-radius: 1px;
+  animation: blink 1s step-end infinite;
+}
+
+/* ─── Hint ────────────────────────────────────────────────────── */
+.text-display-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.text-display-hint kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  background: var(--bg-key);
+  border: 1px solid var(--border-muted);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.45);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
